@@ -1,0 +1,34 @@
+From 6ecf2a6dbf1484082527df03b658e3822bda21fc Mon Sep 17 00:00:00 2001
+From: Anton Arapov <anton@redhat.com>
+Date: Thu, 15 Jul 2010 11:55:16 +0200
+Subject: [PATCH] setup_helper: check for permission and disable default debug mode
+
+  1. fallback gracefully with explanation;
+  2. do actual work; not just print out; // *debug*mode* off.
+
+Signed-off-by: Anton Arapov <anton@redhat.com>
+---
+ huge_page_setup_helper.py |    7 ++++++-
+ 1 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/huge_page_setup_helper.py b/huge_page_setup_helper.py
+index b8545ed..9de0739 100755
+--- a/huge_page_setup_helper.py
++++ b/huge_page_setup_helper.py
+@@ -10,7 +10,12 @@
+ #
+ import os
+ 
+-debug = True
++debug = False
++
++# must be executed under the root to operate
++if os.geteuid() != 0:
++    print "You must be root to setup hugepages!"
++    os._exit(1)
+ 
+ # config files we need access to
+ sysctlConf = "/etc/sysctl.conf"
+-- 
+1.7.1
+

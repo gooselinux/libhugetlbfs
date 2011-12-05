@@ -1,0 +1,29 @@
+From ae308ad56a9ffa6e1a90a64454cdfb845d2650e5 Mon Sep 17 00:00:00 2001
+From: Anton Arapov <anton@redhat.com>
+Date: Thu, 15 Jul 2010 11:46:45 +0200
+Subject: [PATCH] setup_helper: fix the minor arithmetic issue.
+
+  we do want compare MiB with MiB.
+
+Reported-by: CAI Qian <caiqian@redhat.com>
+Signed-off-by: Anton Arapov <anton@redhat.com>
+---
+ huge_page_setup_helper.py |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/huge_page_setup_helper.py b/huge_page_setup_helper.py
+index 737b3d9..b8545ed 100755
+--- a/huge_page_setup_helper.py
++++ b/huge_page_setup_helper.py
+@@ -109,7 +109,7 @@ while not userIn:
+         if userHugePageReqMB > (memTotal - 128):
+             userIn = None
+             print "Refusing to allocate %d, you must leave at least 128MB for the system" % userHugePageReqMB
+-        elif userHugePageReqMB < (hugePageSize / 1024):
++        elif userHugePageReqMB < (hugePageSize / (1024 * 1024)):
+             userIn = None
+             print "Sorry, allocation must be at least a page's worth!"
+         else:
+-- 
+1.7.1
+
